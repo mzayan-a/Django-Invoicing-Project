@@ -1,0 +1,74 @@
+{% extends 'invoices/base.html' %}
+
+{% load static %}
+
+{% block body %}
+
+<section>
+    <div class="div">
+
+        <form id ="myform" action="/create/" method="post">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+           <div class="table-div">
+            <table class="table">
+
+                {{ item_formset.management_form }}
+    
+                {% for form in item_formset.forms %}
+                    {% if forloop.first %}
+                        <thead>
+                        <tr>
+                            {% for field in form.visible_fields %}
+                                <th>{{ field.label|capfirst }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                    {% endif %}
+
+                    <tr class="{% cycle 'row1' 'row2' %} formset_row">
+                        
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+
+                        {% for field in form.visible_fields %}
+                            <td>
+                                {{ field.errors.as_ul }}
+                                {{ field }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div> 
+            <label>Total</label>
+            <input type="text" id = "total" value="0.00">
+         </div>
+
+        <div style=" text-align:right">
+            <input type="submit" value="Save" > 
+        </div>
+           
+
+        </form>
+
+    </div>
+</section>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="{% static 'invoices/js/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+$('.formset_row').formset({
+    addText: 'add item',
+    deleteText: 'remove',
+    prefix: 'invoiceitem_set'
+});
+</script>
+    
+{% endblock body %}
+
+</html>
