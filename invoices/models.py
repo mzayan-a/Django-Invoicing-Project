@@ -31,7 +31,7 @@ class Invoice(models.Model):
 class InvoiceItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
-    price = models.DecimalField(decimal_places=2, max_digits=10, blank=True)
+    price = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=true)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     
     @admin.display(description ="Item Total")
